@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mô Tả Tính Năng - ApexBoost Pro</title>
+  <link rel="stylesheet" href="ui.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================================================
+       🔴 STYLE BENTO GRID CHUYÊN BIỆT: CHIA NHỎ TỪNG Ô TÍNH NĂNG ĐỘC LẬP
+       ========================================================================= */
+    .mota-wrapper {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px; 
+      margin: 120px auto 60px;
+      padding: 0 24px;
+    }
+
+    .back-btn-container {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 110;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 22px;
+      border-radius: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      backdrop-filter: blur(25px) saturate(200%);
+      -webkit-backdrop-filter: blur(25px) saturate(200%);
+      transition: background-color 0.4s, border-color 0.4s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      will-change: transform;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .mota-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .mota-title {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #ffffff 10%, #00f2fe 50%, #ff2a5f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mota-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* BỘ LỌC TÍNH NĂNG (FILTER APPLE BAR) */
+    .filter-bar-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 50px;
+    }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(40px) saturate(220%);
+      -webkit-backdrop-filter: blur(40px) saturate(220%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 6px;
+      position: relative;
+      width: 100%;
+      max-width: 950px; /* Tăng chiều rộng để chứa đầy đủ 7 danh mục mượt mà */
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    .filter-links-container {
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-links-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%; 
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                  width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 1;
+    }
+
+    .filter-btn {
+      background: none;
+      border: none;
+      padding: 10px 22px; 
+      border-radius: 999px;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.85rem; 
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.3s;
+      flex: 1;
+      text-align: center;
+    }
+
+    .filter-btn:hover { color: #fff; }
+    .filter-btn.active { color: #fff; }
+
+    /* Bento Grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+      gap: 24px;
+    }
+
+    /* Bento Card */
+    .bento-card {
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(35px) saturate(220%);
+      -webkit-backdrop-filter: blur(35px) saturate(220%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-shadow: 
+        0 20px 45px rgba(0, 0, 0, 0.35),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.01), rgba(0, 242, 254, 0.03), rgba(255, 42, 95, 0.02), rgba(255, 255, 255, 0.01));
+      background-size: 300% 300%;
+      animation: liquidGlow 15s ease infinite;
+      
+      transition: border-color 0.4s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s, opacity 0.4s;
+      will-change: transform, box-shadow, opacity;
+    }
+
+    .bento-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+      transform: skewX(-25deg);
+      transition: left 0.7s ease-in-out;
+      pointer-events: none;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .bento-card:hover::before { left: 150%; }
+
+    /* Phân màu Neon Hover theo nhóm tab ứng dụng */
+    .bento-card.tab-tuychinh:hover { border-color: rgba(0, 255, 135, 0.4); }
+    .bento-card.tab-windows:hover { border-color: rgba(0, 242, 254, 0.4); }
+    .bento-card.tab-uwp:hover { border-color: rgba(255, 42, 95, 0.4); }
+    .bento-card.tab-phanmem:hover { border-color: rgba(255, 159, 0, 0.4); }
+    .bento-card.tab-dondep:hover { border-color: rgba(175, 64, 255, 0.4); }
+    .bento-card.tab-tuychon:hover { border-color: rgba(255, 51, 51, 0.4); } /* Đỏ Neon cho mục Tùy Chọn */
+
+    /* Huy hiệu */
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: fit-content;
+      margin-bottom: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .tab-tuychinh .card-badge { color: #00ff87; }
+    .tab-windows .card-badge { color: var(--liquid-cyan); }
+    .tab-uwp .card-badge { color: var(--liquid-pink); }
+    .tab-phanmem .card-badge { color: #ff9f00; }
+    .tab-dondep .card-badge { color: #af40ff; }
+    .tab-tuychon .card-badge { color: #ff3333; }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+
+    .tab-tuychinh:hover .card-title { color: #00ff87; }
+    .tab-windows:hover .card-title { color: var(--liquid-cyan); }
+    .tab-uwp:hover .card-title { color: var(--liquid-pink); }
+    .tab-phanmem:hover .card-title { color: #ff9f00; }
+    .tab-dondep:hover .card-title { color: #af40ff; }
+    .tab-tuychon:hover .card-title { color: #ff3333; }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      transition: color 0.3s;
+    }
+
+    .bento-card:hover .card-desc {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    #liquidCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* Hoạt ảnh thác đổ */
+    @keyframes fadeUpEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(35px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      animation: fadeUpEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    .reveal-header { animation-delay: 0.05s; }
+
+    /* Thiết lập độ trễ thác đổ tăng dần lần lượt từng ô (Hỗ trợ tối đa 45 ô) */
+    .bento-card:nth-child(1) { animation-delay: 0.08s; }
+    .bento-card:nth-child(2) { animation-delay: 0.11s; }
+    .bento-card:nth-child(3) { animation-delay: 0.14s; }
+    .bento-card:nth-child(4) { animation-delay: 0.17s; }
+    .bento-card:nth-child(5) { animation-delay: 0.20s; }
+    .bento-card:nth-child(6) { animation-delay: 0.23s; }
+    .bento-card:nth-child(7) { animation-delay: 0.26s; }
+    .bento-card:nth-child(8) { animation-delay: 0.29s; }
+    .bento-card:nth-child(9) { animation-delay: 0.32s; }
+    .bento-card:nth-child(10) { animation-delay: 0.35s; }
+    .bento-card:nth-child(11) { animation-delay: 0.38s; }
+    .bento-card:nth-child(12) { animation-delay: 0.41s; }
+    .bento-card:nth-child(13) { animation-delay: 0.44s; }
+    .bento-card:nth-child(14) { animation-delay: 0.47s; }
+    .bento-card:nth-child(15) { animation-delay: 0.50s; }
+    .bento-card:nth-child(16) { animation-delay: 0.53s; }
+    .bento-card:nth-child(17) { animation-delay: 0.56s; }
+    .bento-card:nth-child(18) { animation-delay: 0.59s; }
+    .bento-card:nth-child(19) { animation-delay: 0.62s; }
+    .bento-card:nth-child(20) { animation-delay: 0.65s; }
+    .bento-card:nth-child(21) { animation-delay: 0.68s; }
+    .bento-card:nth-child(22) { animation-delay: 0.71s; }
+    .bento-card:nth-child(23) { animation-delay: 0.74s; }
+    .bento-card:nth-child(24) { animation-delay: 0.77s; }
+    .bento-card:nth-child(25) { animation-delay: 0.80s; }
+    .bento-card:nth-child(26) { animation-delay: 0.83s; }
+    .bento-card:nth-child(27) { animation-delay: 0.86s; }
+    .bento-card:nth-child(28) { animation-delay: 0.89s; }
+    .bento-card:nth-child(29) { animation-delay: 0.92s; }
+    .bento-card:nth-child(30) { animation-delay: 0.95s; }
+    .bento-card:nth-child(31) { animation-delay: 0.98s; }
+    .bento-card:nth-child(32) { animation-delay: 1.01s; }
+    .bento-card:nth-child(33) { animation-delay: 1.04s; }
+    .bento-card:nth-child(34) { animation-delay: 1.07s; }
+    .bento-card:nth-child(35) { animation-delay: 1.10s; }
+    .bento-card:nth-child(36) { animation-delay: 1.13s; }
+    .bento-card:nth-child(37) { animation-delay: 1.16s; }
+  </style>
+</head>
+<body>
+
+  <canvas id="liquidCanvas"></canvas>
+
+  <div class="fluid-bg">
+    <div class="fluid-orb orb-1" style="opacity: 0.5; filter: blur(80px);"></div>
+    <div class="fluid-orb orb-2" style="opacity: 0.5; filter: blur(80px);"></div>
+    <div class="fluid-orb orb-3" style="opacity: 0.4; filter: blur(80px);"></div>
+  </div>
+
+  <div class="back-btn-container">
+    <a href="index.html" class="back-btn" id="backBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Trang Chủ
+    </a>
+  </div>
+
+  <main class="mota-wrapper">
+    
+    <header class="mota-header reveal reveal-header">
+      <div class="badge" style="color: #ff2a5f; border-color: rgba(255, 42, 95, 0.25);">📖 Sách hướng dẫn sử dụng</div>
+      <h1 class="mota-title">Chi Tiết Tính Năng</h1>
+      <p class="mota-subtitle">Tìm hiểu chi tiết các tính năng tối ưu hóa của ApexBoost Pro theo danh mục trên ứng dụng.</p>
+    </header>
+
+    <!-- 🔴 BỘ LỌC TÍNH NĂNG CHUẨN APPLE (ĐÃ BỔ SUNG ĐẦY ĐỦ 7 TAB) -->
+    <div class="filter-bar-container reveal">
+      <div class="filter-bar">
+        <div class="filter-indicator" id="filterIndicator"></div>
+        <div class="filter-links-container" id="filterLinksContainer">
+          <button class="filter-btn active" data-filter="all">Tất Cả</button>
+          <button class="filter-btn" data-filter="tuychinh">Tùy Chỉnh Chung</button>
+          <button class="filter-btn" data-filter="windows">Tối Ưu Windows</button>
+          <button class="filter-btn" data-filter="uwp">Ứng Dụng HT</button>
+          <button class="filter-btn" data-filter="phanmem">Phần Mềm</button>
+          <button class="filter-btn" data-filter="dondep">Dọn Dẹp</button>
+          <button class="filter-btn" data-filter="tuychon">Tùy Chọn</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mạng lưới ô bento grid -->
+    <div class="bento-grid" id="bentoGrid">
+      
+      <!-- ==========================================
+           ⚙️ NHÓM TÍNH NĂNG 1: TÙY CHỈNH CHUNG
+           ========================================== -->
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tối ưu hiệu năng</h3>
+        <p class="card-desc">Kích hoạt chế độ nguồn năng lượng cao, thúc ép phần cứng hệ thống máy tính dồn hết sức lực để vận hành mượt và nhanh nhất có thể.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Hiện biểu tượng thông báo</h3>
+        <p class="card-desc">Ra lệnh cho Windows hiển thị toàn bộ 100% tất cả các biểu tượng icon nhỏ tại khay hệ thống ở góc dưới bên phải thay vì tự ý ẩn bớt đi.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Xóa độ trễ của menu</h3>
+        <p class="card-desc">Rút ngắn và xóa bỏ thời gian trễ hệ thống, giúp các menu (như bảng menu nhấp chuột phải) hiển thị ngay lập tức sau cú click.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tối ưu mạng</h3>
+        <p class="card-desc">Sắp xếp, tinh chỉnh thông số băng thông đường truyền mạng giúp lướt web, xem video độ phân giải cao hay chơi game online không bị nghẽn.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt báo cáo lỗi</h3>
+        <p class="card-desc">Vô hiệu hóa dịch vụ gửi báo cáo chẩn đoán lỗi về máy chủ Microsoft mỗi khi phần mềm bị lỗi đột ngột, giúp tiết kiệm băng thông và RAM chạy ngầm.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt kiểm tra tương thích</h3>
+        <p class="card-desc">Bỏ qua quá trình quét kiểm tra độ tương thích rườm rà của Windows đối với phần mềm cũ, giúp phần mềm được khởi chạy ngay tức khắc.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt dịch vụ In</h3>
+        <p class="card-desc">Nếu bạn không sở hữu hoặc không sử dụng máy in giấy, tắt dịch vụ này đi để hệ điều hành bớt một dịch vụ chạy ngầm lãng phí tài nguyên.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt dịch vụ Fax</h3>
+        <p class="card-desc">Thời đại ngày nay không còn ai sử dụng máy Fax cổ điển để truyền thư giấy, tắt dịch vụ này đi để hệ thống nhẹ nhàng và gọn gàng hơn.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt Sticky Keys</h3>
+        <p class="card-desc">Vô hiệu hóa hộp thoại cảnh báo đi kèm tiếng kêu "két két" phiền toái tự xuất hiện mỗi khi bạn vô tình nhấn phím Shift 5 lần liên tiếp lúc chơi game.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt SmartScreen</h3>
+        <p class="card-desc">Vô hiệu hóa người gác cửa chuyên chặn và cảnh báo các file lạ tải từ internet, hạn chế báo cáo lỗi sai khi cài đặt phần mềm ngoài App Store.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Hệ thống</span>
+        <h3 class="card-title">Bật thời gian UTC</h3>
+        <p class="card-desc">Đồng bộ giờ hệ thống theo múi giờ quốc tế tiêu chuẩn. Tránh lỗi lệch giờ khi bạn cài song song hai hệ điều hành khác nhau trên máy tính.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Ổ cứng</span>
+        <h3 class="card-title">Tắt System Restore</h3>
+        <p class="card-desc">Tắt dịch vụ tự động tạo điểm sao lưu hệ thống ngầm, giúp giải phóng hàng chục GB dung lượng lưu trữ trên các ổ đĩa SSD và HDD.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Ổ cứng</span>
+        <h3 class="card-title">Tắt Superfetch</h3>
+        <p class="card-desc">Ngừng việc hệ thống tự nạp trước ứng dụng vào RAM, khắc phục triệt để tình trạng ổ cứng HDD bị nghẽn hoạt động 100% (Full Disk).</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Ổ cứng</span>
+        <h3 class="card-title">Tắt chế độ ngủ đông</h3>
+        <p class="card-desc">Xóa tệp tin hiberfil.sys ẩn chiếm dung lượng cực lớn để giải phóng không gian lưu trữ đáng kể nếu bạn chỉ dùng chế độ Sleep bình thường.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Ổ cứng</span>
+        <h3 class="card-title">Tắt Dấu thời gian NTFS</h3>
+        <p class="card-desc">Chặn hệ thống tự động ghi lại mốc thời gian mỗi lần truy xuất tệp, làm giảm số lần đọc ghi không cần thiết giúp tăng tuổi thọ ổ đĩa.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Ổ cứng</span>
+        <h3 class="card-title">Tắt Search Indexing</h3>
+        <p class="card-desc">Vô hiệu hóa việc hệ thống chạy ngầm quét dọn, phân tích lập chỉ mục tìm kiếm tệp tin liên tục gây nóng chip CPU và chậm máy.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Ứng dụng</span>
+        <h3 class="card-title">Tắt đo lường Office & Web</h3>
+        <p class="card-desc">Ngăn chặn các phần mềm văn phòng Word, Excel, Chrome, Firefox âm thầm theo dõi thói quen sử dụng và gửi dữ liệu về máy chủ nhà sản xuất.</p>
+      </div>
+
+      <div class="bento-card tab-tuychinh reveal" data-category="tuychinh">
+        <span class="card-badge">⚙️ Tùy Chỉnh &bull; Quyền riêng tư</span>
+        <h3 class="card-title">Tắt theo dõi bảo mật</h3>
+        <p class="card-desc">Vô hiệu hóa tất cả các tiến trình theo dõi thói quen người dùng ngầm của Windows, trả lại quyền riêng tư dữ liệu cá nhân cao nhất.</p>
+      </div>
+
+      <!-- ==========================================
+           🪟 NHÓM TÍNH NĂNG 2: TỐI ƯU WINDOWS
+           ========================================== -->
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Hệ thống</span>
+        <h3 class="card-title">Khôi phục File Explorer cũ</h3>
+        <p class="card-desc">Mang giao diện quản lý tệp tin đơn giản, nhẹ nhàng và ổn định của Windows 10 quay trở lại hoạt động trên Windows 11.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Taskbar</span>
+        <h3 class="card-title">Ẩn thời tiết & tìm kiếm</h3>
+        <p class="card-desc">Dọn sạch thanh tìm kiếm to đùng và biểu tượng thời tiết chiếm dụng diện tích, trả lại vẻ tinh tế và tối giản cho thanh Taskbar.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Hệ thống</span>
+        <h3 class="card-title">Bật tên đường dẫn dài</h3>
+        <p class="card-desc">Vượt qua giới hạn 260 ký tự đường dẫn mặc định của Windows, cho phép bạn tạo, sao chép thư mục lồng nhau sâu tùy ý mà không báo lỗi.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt kiểm tra TPM 2.0</h3>
+        <p class="card-desc">Loại bỏ yêu cầu phần cứng bảo mật TPM 2.0 bắt buộc của Microsoft, cho phép cài đặt các hệ điều hành và cập nhật mượt mà trên máy tính đời cũ.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Hệ thống</span>
+        <h3 class="card-title">Tắt Modern Standby</h3>
+        <p class="card-desc">Ngăn laptop tự động chạy ngầm, gây nóng máy và hao kiệt pin trong balo khi bạn đã gập nắp máy ngủ.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Windows Update</span>
+        <h3 class="card-title">Tắt tự động Update</h3>
+        <p class="card-desc">Chặn Windows tự động tải, tự động cài và tự khởi động lại thiết bị khi bạn đang làm việc dở dang, trả quyền kiểm soát cập nhật về tay bạn.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Taskbar</span>
+        <h3 class="card-title">Căn Taskbar sang trái</h3>
+        <p class="card-desc">Di chuyển vị trí các ứng dụng từ chính giữa quay về góc bên trái quen thuộc giống như giao diện truyền thống của Windows 10.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Taskbar</span>
+        <h3 class="card-title">Tắt Widgets & Chat</h3>
+        <p class="card-desc">Gỡ bỏ bảng tin tức Widget và Teams khỏi Taskbar, giải phóng hàng trăm MB bộ nhớ RAM bị các tiến trình này chiếm dụng chạy ẩn.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Quyền riêng tư</span>
+        <h3 class="card-title">Tắt Cortana & Quảng cáo</h3>
+        <p class="card-desc">Vô hiệu hóa trợ lý ảo Cortana ít khi dùng tới, dọn sạch mọi quảng cáo đề xuất phiền phức trong Menu Start và trình duyệt Edge.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Gaming</span>
+        <h3 class="card-title">Bật Game Mode</h3>
+        <p class="card-desc">Yêu cầu hệ điều hành Windows tập trung tối đa nguồn sức mạnh phần cứng vào tựa game bạn đang chạy để nâng số lượng khung hình trên giây (FPS).</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Gaming</span>
+        <h3 class="card-title">Tắt Xbox Live & Game Bar</h3>
+        <p class="card-desc">Ngừng kết nối dịch vụ chơi game Xbox ngầm và dọn dẹp công cụ ghi hình mặc định của Win giúp giảm bớt tài nguyên cho VGA.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Cảm ứng</span>
+        <h3 class="card-title">Tắt Windows Ink & Cảm ứng</h3>
+        <p class="card-desc">Tắt vùng viết tay bằng bút cảm ứng và dọn dẹp bộ sửa lỗi chính tả tiếng Việt liên tục tự động gạch chân đỏ dưới mỗi chữ bạn gõ.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Extras</span>
+        <h3 class="card-title">Tắt chia đôi màn hình</h3>
+        <p class="card-desc">Tắt khung gợi ý xếp đặt bố cục các cửa sổ khi bạn kéo giữ chuột ra sát rìa màn hình nếu bạn thấy tính năng này vướng víu và che mắt.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Extras</span>
+        <h3 class="card-title">Bật chuột phải cũ</h3>
+        <p class="card-desc">Khôi phục bảng menu lựa chọn cổ điển đầy đủ của Windows 10 trên Windows 11. Loại bỏ sự phiền phức của dòng chữ "Show more options".</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Extras</span>
+        <h3 class="card-title">Bật Compact Explorer</h3>
+        <p class="card-desc">Thu nhỏ khoảng cách lề thừa giữa các thư mục trong File Explorer. Giúp màn hình hiển thị được lượng dữ liệu tối đa mà không cần cuộn chuột nhiều.</p>
+      </div>
+
+      <div class="bento-card tab-windows reveal" data-category="windows">
+        <span class="card-badge">🪟 Windows &bull; Extras</span>
+        <h3 class="card-title">Tắt Copilot AI</h3>
+        <p class="card-desc">Tắt hoàn toàn trợ lý ảo trí tuệ nhân tạo Copilot của Microsoft để ngăn ứng dụng này tự động chạy ngầm, gây tiêu tốn RAM và CPU.</p>
+      </div>
+
+      <!-- ==========================================
+           📦 NHÓM TÍNH NĂNG 3: ỨNG DỤNG HT (UWP) - ĐÃ CĂN GIỮA TUYỆT ĐỐI
+           ========================================== -->
+      <div class="bento-card tab-uwp reveal" data-category="uwp" style="grid-column: span 1; display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center;">
+        <span class="card-badge">📦 Ứng Dụng HT &bull; UWP</span>
+        <h3 class="card-title">Gỡ ứng dụng UWP</h3>
+        <p class="card-desc">Gỡ cài đặt triệt để các ứng dụng rác hệ thống tích hợp sẵn (Bloatware) như Xbox, Cortana, Weather, Solitaire... mà bình thường Windows không cho phép bạn gỡ trực tiếp, giải phóng không gian ổ cứng tối đa.</p>
+      </div>
+
+      <!-- ==========================================
+           📥 NHÓM TÍNH NĂNG 4: PHẦN MỀM 
+           ========================================== -->
+      <div class="bento-card tab-phanmem reveal" data-category="phanmem">
+        <span class="card-badge">📥 Phần Mềm &bull; Góc Phải Trên</span>
+        <h3 class="card-title">Làm mới các liên kết</h3>
+        <p class="card-desc">Hoạt động giống như phím F5 trên trình duyệt. Nhấn vào nút này để phần mềm cập nhật dữ liệu đường truyền mới nhất từ internet, tránh gặp lỗi link cũ bị hỏng khi tải phần mềm.</p>
+      </div>
+
+      <div class="bento-card tab-phanmem reveal" data-category="phanmem">
+        <span class="card-badge">📥 Phần Mềm &bull; Góc Trái Dưới</span>
+        <h3 class="card-title">Nút Đặt Thư Mục Tải Về (...)</h3>
+        <p class="card-desc">Nút "chọn chỗ cất". Bấm vào đây để duyệt và chọn thư mục hoặc phân vùng ổ đĩa (ổ C, D, E...) bất kỳ mà bạn muốn dùng để chứa các phần mềm sau khi tải xong.</p>
+      </div>
+
+      <div class="bento-card tab-phanmem reveal" data-category="phanmem">
+        <span class="card-badge">📥 Phần Mềm &bull; Góc Trái Dưới</span>
+        <h3 class="card-title">Thanh Tiến Trình "Chờ"</h3>
+        <p class="card-desc">Vùng trạng thái hiển thị trực quan phần trăm tiến độ tải xuống (chạy từ 0% đến 100%) để bạn biết chính xác phần mềm của mình đã

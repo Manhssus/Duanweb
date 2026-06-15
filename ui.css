@@ -1,0 +1,771 @@
+:root {
+  --bg-dark: #05060f;
+  --apple-blue: #0071e3;
+  --liquid-pink: #ff2a5f;
+  --liquid-cyan: #00f2fe;
+  --liquid-violet: #7f00ff;
+  --glass-fill: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --font-stack: 'Plus Jakarta Sans', sans-serif;
+  
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+/* Reset cơ bản */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-stack);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Điểm sáng di động thông minh đuổi theo con trỏ */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    450px circle at var(--mouse-x) var(--mouse-y),
+    rgba(0, 242, 254, 0.035) 0%,
+    transparent 80%
+  );
+  will-change: background;
+}
+
+/* Nền cực quang phụ bổ sung chiều sâu */
+.fluid-bg {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  filter: blur(60px); /* Tối ưu hiệu năng card đồ họa */
+  pointer-events: none;
+  will-change: transform;
+}
+
+.fluid-orb {
+  position: absolute;
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  animation: floatOrb 25s infinite alternate ease-in-out;
+  will-change: transform;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle, var(--liquid-violet) 0%, transparent 70%);
+}
+
+.orb-2 {
+  width: 700px;
+  height: 700px;
+  bottom: -15%;
+  right: -5%;
+  background: radial-gradient(circle, var(--liquid-pink) 0%, transparent 70%);
+  animation-duration: 20s;
+}
+
+.orb-3 {
+  width: 500px;
+  height: 500px;
+  top: 30%;
+  left: 30%;
+  background: radial-gradient(circle, var(--liquid-cyan) 0%, transparent 70%);
+  animation-duration: 18s;
+}
+
+.orb-4 {
+  width: 550px;
+  height: 550px;
+  bottom: 30%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(0, 113, 227, 0.3) 0%, transparent 70%);
+  animation-duration: 22s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(100px, -80px) rotate(180deg) scale(1.15); }
+  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
+/* Thanh điều hướng */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(5, 6, 15, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================================================================
+   🔴 CẢI TIẾN: THANH ĐIỀU HƯỚNG LIQUID GLASS ĐỘNG KIỂU APPLE
+   ========================================================================= */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  
+  /* Nền kính lỏng cực quang chuyển động chậm */
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.02), rgba(0, 242, 254, 0.04), rgba(255, 42, 95, 0.02), rgba(255, 255, 255, 0.02));
+  background-size: 400% 400%;
+  animation: liquidGlow 15s ease infinite;
+
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-links:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 12px 35px rgba(0, 242, 254, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 999px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+/* Hiệu ứng trượt phủ mờ sang trọng khi di chuột */
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Nút góc phải (GitHub) thiết kế theo phím capsule mờ của Apple */
+.github-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 18px;
+  border-radius: 20px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.github-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+}
+
+.github-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  z-index: 10;
+  padding: 160px 24px 60px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--liquid-cyan);
+  margin-bottom: 25px;
+}
+
+.hero-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #a5a5a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+/* Nút tải xuống kiểu Apple Liquid */
+.download-container {
+  display: inline-block;
+}
+
+/* HOẠT ẢNH NỀN ĐỘNG CỰC QUANG (AURORA LIQUID GLOW) */
+@keyframes liquidGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.apple-btn {
+  width: 320px;
+  height: 58px;
+  border-radius: 29px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  
+  /* NỀN ĐỘNG CỰC QUANG LIQUID TRÔI CHẬM DƯỚI PHÍM BẤM */
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.04), rgba(0, 242, 254, 0.06), rgba(255, 42, 95, 0.05), rgba(255, 255, 255, 0.04));
+  background-size: 400% 400%;
+  animation: liquidGlow 12s ease infinite;
+
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+  will-change: transform; 
+}
+
+.apple-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 113, 227, 0.25);
+}
+
+.btn-label {
+  position: relative;
+  z-index: 5;
+}
+
+.liquid-fluid-wave {
+  position: absolute;
+  top: 105%;
+  left: 50%;
+  width: 250%;
+  height: 400%;
+  background: linear-gradient(135deg, var(--apple-blue), var(--liquid-cyan));
+  border-radius: 40%;
+  transform: translateX(-50%);
+  transition: top 3s cubic-bezier(0.35, 0, 0.15, 1);
+}
+
+.apple-btn.loading-active .liquid-fluid-wave {
+  animation: rotateWave 6s infinite linear;
+}
+
+@keyframes rotateWave {
+  0% { transform: translate(-50%, 0) rotate(0deg); }
+  100% { transform: translate(-50%, 0) rotate(360deg); }
+}
+
+.apple-btn.success-active {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  color: #05060f;
+  border-color: #00f2fe;
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.5);
+}
+
+.apple-btn.success-active .liquid-fluid-wave {
+  display: none;
+}
+
+.download-subtext {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 12px;
+}
+
+/* Showcase Section */
+.showcase {
+  position: relative;
+  z-index: 10;
+  padding: 80px 24px;
+}
+
+.showcase-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+}
+
+/* Apple Tab Bar Container */
+.apple-tab-bar-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 45px;
+}
+
+/* Apple Tab Bar */
+.apple-tab-bar {
+  display: flex;
+  align-items: center;
+  
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.03), rgba(0, 242, 254, 0.05), rgba(255, 42, 95, 0.03), rgba(255, 255, 255, 0.03));
+  background-size: 400% 400%;
+  animation: liquidGlow 15s ease infinite;
+
+  backdrop-filter: blur(40px) saturate(220%);
+  -webkit-backdrop-filter: blur(40px) saturate(220%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px;
+  position: relative;
+  
+  width: 100%;
+  max-width: 92vw;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+/* Các nút tiện ích trái/phải */
+.tab-util-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.tab-util-icon:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.util-svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Dải kính lướt (Sliding Indicator) */
+.tab-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%; 
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  
+  /* Hiệu ứng lướt mềm mại bằng gia tốc Apple */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+              width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+/* Khung chứa danh sách phím */
+.tab-links-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.tab-links-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Các phím Tab riêng lẻ */
+.tab-link {
+  background: none;
+  border: none;
+  padding: 10px 18px; 
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.85rem; 
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+
+.tab-link:hover {
+  color: #fff;
+}
+
+.tab-link.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+
+/* Khung Mockup kính lỏng */
+.mockup-wrapper {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 12px;
+  box-shadow: 
+    0 35px 70px rgba(0, 0, 0, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+  max-width: 960px;
+  margin: 0 auto;
+  will-change: transform;
+}
+
+.mockup-reflection {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.mockup-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-red { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green { background: #27c93f; }
+
+.mockup-title {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+.mockup-screen {
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+/* =========================================================================
+   🔴 CÁC LỚP BỔ SUNG: KHU VỰC CHI TIẾT TÍNH NĂNG MỚI (BENTO GLASS GRID)
+   ========================================================================= */
+.features-section {
+  position: relative;
+  z-index: 10;
+  padding: 100px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 35px;
+}
+
+@media (max-width: 900px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.5s ease, 
+              background-color 0.5s ease,
+              box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Ánh sáng mờ hover động chạy theo trỏ chuột bên trong thẻ */
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    300px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%),
+    rgba(255, 255, 255, 0.05),
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(0, 242, 254, 0.05);
+}
+
+/* KHUNG GIẢ LẬP TRÌNH DUYỆT / CỬA SỔ PHẦN MỀM ĐỂ CHỨA SCREENSHOT */
+.feature-img-wrapper {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 28px 24px 24px; /* Chừa khoảng trống phía trên cho nút điều hướng mini */
+  height: 280px; /* Chiều cao cố định hài hòa để giữ các thẻ cân bằng */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Nút mini giả lập OS ở góc trái khung ảnh */
+.mini-window-header {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+
+.mini-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.3s;
+}
+
+.feature-card:hover .mini-dot:nth-child(1) { background: #ff5f56; }
+.feature-card:hover .mini-dot:nth-child(2) { background: #ffbd2e; }
+.feature-card:hover .mini-dot:nth-child(3) { background: #27c93f; }
+
+/* HÌNH ẢNH SCREENSHOT ĐƯỢC THIẾT KẾ ĐẸP, KHÔNG BỊ CO GIÃN/MẤT HÌNH */
+.feature-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Đảm bảo hình ảnh giữ nguyên tỉ lệ gốc hoàn hảo, không bị cắt xén */
+  border-radius: 8px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.65), 
+    0 0 1px rgba(255, 255, 255, 0.25);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Hiệu ứng nổi lơ lửng và đổ bóng sâu hơn khi Hover */
+.feature-card:hover .feature-img {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 
+    0 22px 45px rgba(0, 0, 0, 0.8), 
+    0 0 15px rgba(0, 242, 254, 0.1);
+}
+
+.feature-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  background: linear-gradient(180deg, #ffffff 0%, #d5d5d5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.feature-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* =========================================================================
+   🔴 HIỆU ỨNG HIỆN HÌNH MƯỢT MÀ KHI CUỘN TRANG (SMOOTH SCROLL REVEAL)
+   ========================================================================= */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* responsive navbar cho thiết bị di động */
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0 16px;
+  }
+  .github-nav-btn {
+    display: none; /* Ẩn bớt nút github phụ bên phải trên di động để đỡ chật chội */
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.1rem;
+  }
+  .nav-links a {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 60px 24px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
